@@ -2,6 +2,25 @@
 /* Авторы и лицензии снимков (сгенерировано из метаданных Wikimedia Commons).
    a — автор (пусто, если не указан), l — лицензия, u — страница файла. */
 const CREDITS = {
+ "images/places/dremlevo-cover.jpg": {"a": "BrestCITY", "l": "источник — brestcity.com", "u": "https://brestcity.com/blog/memorialnyj-kompleks-dremlevo-v-zhabinkovskom-rajone"},
+ "images/places/dremlevo-tour-1.jpg": {"a": "СБ. Беларусь сегодня", "l": "источник — sb.by", "u": "https://www.sb.by/articles/v-memorialnom-komplekse-dremlevo-pod-zhabinkoy-proshla-aktsiya-po-navedeniyu-poryadka-.html"},
+ "images/places/dremlevo-tour-2.jpg": {"a": "СБ. Беларусь сегодня", "l": "источник — sb.by", "u": "https://www.sb.by/articles/v-memorialnom-komplekse-dremlevo-pod-zhabinkoy-proshla-aktsiya-po-navedeniyu-poryadka-.html"},
+ "images/places/rylenki-cover.jpg": {"a": "savehistory.by", "l": "источник — savehistory.by", "u": "https://www.savehistory.by/karta/memorialnyy-kompleks-rylenki/"},
+ "images/places/rylenki-tour-1.jpg": {"a": "БЕЛТА", "l": "источник — belta.by", "u": "https://belta.by/regions/view/v-memorialnom-komplekse-rylenki-otkryli-novuju-plitu-s-41-familiej-pogibshih-voinov-412438-2020/"},
+ "images/places/rylenki-tour-2.jpg": {"a": "sport.vitobl.by", "l": "источник — sport.vitobl.by", "u": "http://sport.vitobl.by/object/memorialnyy-kompleks-rylenki"},
+ "images/places/krinichka-cover.jpg": {"a": "museums.by", "l": "источник — museums.by", "u": "https://museums.by/dostoprimechatelnosti/memorialnyy-kompleks-partizanskaya-krinichka/"},
+ "images/places/krinichka-tour-1.jpg": {"a": "gomelraton.com", "l": "источник — gomelraton.com", "u": "https://www.gomelraton.com/press-center/articles/poseshchenie-memorialnogo-kompleksa-partizanskaya-krinichka/"},
+ "images/places/shaulichi-cover.jpg": {"a": "СБ. Беларусь сегодня", "l": "источник — sb.by", "u": "https://www.sb.by/articles/memorial-na-meste-derevni-shaulichi-ognennoy-sestry-khatyni.html"},
+ "images/places/shaulichi-tour-1.jpg": {"a": "TravelAgency.by", "l": "источник — travelagency.by", "u": "https://travelagency.by/mesta/memorialnyy-kompleks-shaulichi.html"},
+ "images/places/grodnokurgan-cover.jpg": {"a": "СБ. Беларусь сегодня", "l": "источник — sb.by", "u": "https://www.sb.by/articles/obeliski-velikogo-podviga-kurgan-slavy-v-grodno.html"},
+ "images/places/grodnokurgan-tour-1.jpg": {"a": "Вечерний Гродно", "l": "источник — vgr.by", "u": "https://vgr.by/2022/05/08/gorod-na-ladoni-kak-sozdavali-kurgan-slavyi-v-grodno/"},
+ "images/places/grodnokurgan-tour-2.jpg": {"a": "Вечерний Гродно", "l": "источник — vgr.by", "u": "https://vgr.by/2020/07/04/den-nezavisimosti-v-grodno-zavershilsya-prazdnichnyim-salyutom-na-kurgane-slavyi/"},
+ "images/places/zyslov-cover.jpg": {"a": "fotobel.by", "l": "источник — fotobel.by", "u": "https://www.fotobel.by/memorialy-belarusi/memorial-ostrov-zyslov/"},
+ "images/places/zyslov-tour-1.jpg": {"a": "fotobel.by", "l": "источник — fotobel.by", "u": "https://www.fotobel.by/memorialy-belarusi/memorial-ostrov-zyslov/"},
+ "images/places/borki-cover.jpg": {"a": "СБ. Беларусь сегодня", "l": "источник — sb.by", "u": "https://www.sb.by/articles/nikogda-ne-zabudem58642.html"},
+ "images/places/borki-tour-1.jpg": {"a": "СБ. Беларусь сегодня", "l": "источник — sb.by", "u": "https://www.sb.by/articles/borki-nikogda-ne-zabudem.html"},
+ "images/places/usakino-cover.jpg": {"a": "probelarus.by", "l": "источник — probelarus.by", "u": "https://probelarus.by/belarus/sight/voennaya-istoriya/1496928730.html"},
+ "images/places/usakino-tour-1.jpg": {"a": "strada.by", "l": "источник — strada.by", "u": "https://strada.by/story/memorialnyi-kompleks-usakino"},
  "images/archive/bagration-1944-preparation.jpg": {
   "a": "",
   "l": "CC BY 4.0",

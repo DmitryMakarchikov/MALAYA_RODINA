@@ -1,6 +1,6 @@
 # Источники изображений
 
-Все снимки взяты с [Wikimedia Commons](https://commons.wikimedia.org/) и используются по указанным лицензиям.
+Снимки взяты с [Wikimedia Commons](https://commons.wikimedia.org/) и используются по указанным лицензиям. Для восьми мест свободных снимков нет — их фото взяты с сайтов СМИ и туристических порталов с указанием источника (раздел в конце); права на них принадлежат авторам.
 Снимки уменьшены до 1600 px по ширине; портреты на конверте и марке обрезаны до лица — других изменений нет.
 Список генерируется из метаданных Commons (`credits.js`).
 
@@ -150,3 +150,27 @@
 - CC BY 2.0: 2
 
 CC BY / CC BY-SA требуют указывать автора и лицензию — на сайте подпись выводится под каждым снимком со ссылкой на страницу файла.
+
+## Снимки с сайтов (8 мест)
+
+| Файл | Источник | Условия |
+|---|---|---|
+| [dremlevo-cover.jpg](https://brestcity.com/blog/memorialnyj-kompleks-dremlevo-v-zhabinkovskom-rajone) | BrestCITY | с указанием источника |
+| [dremlevo-tour-1.jpg](https://www.sb.by/articles/v-memorialnom-komplekse-dremlevo-pod-zhabinkoy-proshla-aktsiya-po-navedeniyu-poryadka-.html) | СБ. Беларусь сегодня | с указанием источника |
+| [dremlevo-tour-2.jpg](https://www.sb.by/articles/v-memorialnom-komplekse-dremlevo-pod-zhabinkoy-proshla-aktsiya-po-navedeniyu-poryadka-.html) | СБ. Беларусь сегодня | с указанием источника |
+| [rylenki-cover.jpg](https://www.savehistory.by/karta/memorialnyy-kompleks-rylenki/) | savehistory.by | с указанием источника |
+| [rylenki-tour-1.jpg](https://belta.by/regions/view/v-memorialnom-komplekse-rylenki-otkryli-novuju-plitu-s-41-familiej-pogibshih-voinov-412438-2020/) | БЕЛТА | с указанием источника |
+| [rylenki-tour-2.jpg](http://sport.vitobl.by/object/memorialnyy-kompleks-rylenki) | sport.vitobl.by | с указанием источника |
+| [krinichka-cover.jpg](https://museums.by/dostoprimechatelnosti/memorialnyy-kompleks-partizanskaya-krinichka/) | museums.by | с указанием источника |
+| [krinichka-tour-1.jpg](https://www.gomelraton.com/press-center/articles/poseshchenie-memorialnogo-kompleksa-partizanskaya-krinichka/) | gomelraton.com | с указанием источника |
+| [shaulichi-cover.jpg](https://www.sb.by/articles/memorial-na-meste-derevni-shaulichi-ognennoy-sestry-khatyni.html) | СБ. Беларусь сегодня | с указанием источника |
+| [shaulichi-tour-1.jpg](https://travelagency.by/mesta/memorialnyy-kompleks-shaulichi.html) | TravelAgency.by | с указанием источника |
+| [grodnokurgan-cover.jpg](https://www.sb.by/articles/obeliski-velikogo-podviga-kurgan-slavy-v-grodno.html) | СБ. Беларусь сегодня | с указанием источника |
+| [grodnokurgan-tour-1.jpg](https://vgr.by/2022/05/08/gorod-na-ladoni-kak-sozdavali-kurgan-slavyi-v-grodno/) | Вечерний Гродно | с указанием источника |
+| [grodnokurgan-tour-2.jpg](https://vgr.by/2020/07/04/den-nezavisimosti-v-grodno-zavershilsya-prazdnichnyim-salyutom-na-kurgane-slavyi/) | Вечерний Гродно | с указанием источника |
+| [zyslov-cover.jpg](https://www.fotobel.by/memorialy-belarusi/memorial-ostrov-zyslov/) | fotobel.by | с указанием источника |
+| [zyslov-tour-1.jpg](https://www.fotobel.by/memorialy-belarusi/memorial-ostrov-zyslov/) | fotobel.by | с указанием источника |
+| [borki-cover.jpg](https://www.sb.by/articles/nikogda-ne-zabudem58642.html) | СБ. Беларусь сегодня | с указанием источника |
+| [borki-tour-1.jpg](https://www.sb.by/articles/borki-nikogda-ne-zabudem.html) | СБ. Беларусь сегодня | с указанием источника |
+| [usakino-cover.jpg](https://probelarus.by/belarus/sight/voennaya-istoriya/1496928730.html) | probelarus.by | с указанием источника |
+| [usakino-tour-1.jpg](https://strada.by/story/memorialnyi-kompleks-usakino) | strada.by | с указанием источника |
