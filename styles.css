@@ -1129,3 +1129,7 @@ input, select, textarea { font: inherit; color: inherit; }
 @media (min-width: 761px) {
   .tour-panel { bottom: auto; max-height: calc(100% - 32px); transition: transform .45s var(--ease), top .2s ease-out; }
 }
+
+/* --- Общий призыв скрыт на вкладке «Будущее»; обложка места кадрируется выше, чтобы не резать скульптуры --- */
+.contribute-general[hidden] { display: none; }
+.place-cover > img { object-position: center 30%; }

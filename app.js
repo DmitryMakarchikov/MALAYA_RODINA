@@ -788,7 +788,7 @@ const renderPlace = (id, tab = 'past') => {
     <!-- Будущее -->
     <section class="tab-panel" id="tab-future" role="tabpanel" aria-labelledby="tabbtn-future">${futureHTML(p)}</section>
 
-    <div class="block contribute" style="margin-top:28px">
+    <div class="block contribute contribute-general" style="margin-top:28px">
       <div><h3>${t('contrib.h')}</h3><p>${t('contrib.p')}</p></div>
       <button class="btn btn-outline" data-contribute="${p.id}">${ico('i-plus')}${t('contrib.btn')}</button>
     </div>
@@ -822,6 +822,8 @@ const switchTab = (tab, { push = false, scroll = false, instant = false } = {}) 
   const order = ['past', 'present', 'future'];
   $$('.tab', root).forEach((tb) => { const on = tb.dataset.tab === tab; tb.setAttribute('aria-selected', String(on)); tb.tabIndex = on ? 0 : -1; });
   $$('.tab-panel', root).forEach((pn) => pn.classList.toggle('active', pn.id === 'tab-' + tab));
+  // на «Будущем» есть свой призыв «Есть идея лучше?» — общий блок там лишний
+  const gen = $('.contribute-general', root); if (gen) gen.hidden = tab === 'future';
   $('#tabInk').style.transform = `translateX(${order.indexOf(tab) * 100}%)`;
   if (push) history.replaceState(null, '', `#/place/${root.dataset.current}/${tab}`);
   stopAudio();
