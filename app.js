@@ -853,7 +853,7 @@ const audioBlockHTML = (p) => {
 };
 const transcriptHTML = (a) => a.transcript ? `
   <button class="link-btn transcript-btn" aria-expanded="false" data-transcript>${t('audio.showText')}</button>
-  <div class="transcript" hidden>${a.story && LANG === 'be' ? `<p class="form-note">${t('audio.ruOnly')}</p>` : ''}<p>${esc(L(a.transcript))}</p><p class="form-note">${a.story ? t('audio.storyNote') : `${t('source')}: ${esc(a.src)}`}</p></div>` : '';
+  <div class="transcript" hidden>${a.story && LANG === 'be' ? `<p class="form-note">${t('audio.ruOnly')}</p>` : ''}<p>${esc(L(a.transcript))}</p>${a.story ? '' : `<p class="form-note">${t('source')}: ${esc(a.src)}</p>`}</div>` : '';
 
 /* ---------- Пройтись по месту: фототур с точками и панорама 360° (Яндекс Карты) ---------- */
 const panoURL = (pn) => {
@@ -952,6 +952,10 @@ const initTour = (p) => {
       ${pt.ins ? `<p class="inscription">${esc(pt.ins)}</p>` : ''}
       ${pts.length > 1 ? `<button class="btn btn-ghost btn-sm" data-tour-next>${t('tour.nextPoint')} →</button>` : ''}`;
     panel.classList.add('open');
+    // фото с карточкой целиком под шапкой и закреплёнными вкладками
+    const tabs = $('.tabs'), tb = tabs && getComputedStyle(tabs).position === 'sticky' ? tabs.getBoundingClientRect().bottom : $('.site-header').getBoundingClientRect().bottom;
+    const vr = view.getBoundingClientRect(), gap = 12;
+    if (vr.top < tb + gap || vr.bottom > innerHeight) window.scrollBy({ top: vr.top - tb - gap, behavior: 'smooth' });
     $('[data-tour-next]', panel)?.addEventListener('click', () => { const hs = $$('.hotspot', view); hs[(i + 1) % hs.length].click(); });
     $('[data-tour-reset]', panel).addEventListener('click', reset);
   };
