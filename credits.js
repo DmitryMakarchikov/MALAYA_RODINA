@@ -92,11 +92,6 @@ const CREDITS = {
   "l": "CC0",
   "u": "https://commons.wikimedia.org/wiki/File:Bronnaya_Gora_monument_to_about_50000_Jews_1b.jpg"
  },
- "images/places/bronnaya-tour-1.jpg": {
-  "a": "Avner",
-  "l": "CC0",
-  "u": "https://commons.wikimedia.org/wiki/File:Bronnaya_Gora_road_to_memorial_1c.jpg"
- },
  "images/places/buynichi-cover.jpg": {
   "a": "Yuriy Tim",
   "l": "CC BY 3.0",

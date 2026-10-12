@@ -857,6 +857,8 @@ const transcriptHTML = (a) => a.transcript ? `
 
 /* ---------- Пройтись по месту: фототур с точками и панорама 360° (Яндекс Карты) ---------- */
 const panoURL = (pn) => {
+  // Google Street View: g — [широта, долгота] точки у памятника, h — направление взгляда
+  if (pn.g) return `https://www.google.com/maps?layer=c&cbll=${pn.g[0]},${pn.g[1]}&cbp=11,${pn.h || 0},0,0,${pn.p || 0}&source=embed&output=svembed&hl=${LANG === 'be' ? 'be' : 'ru'}`;
   const [lo, la] = pn.point;
   return `https://yandex.by/map-widget/v1/?l=stv%2Csta&ll=${lo}%2C${la}&z=17&panorama%5Bpoint%5D=${lo}%2C${la}&panorama%5Bdirection%5D=${pn.dir || 0}%2C0&panorama%5Bspan%5D=120%2C60&panorama%5Bfull%5D=true`;
 };
@@ -871,7 +873,7 @@ const tourHTML = (p) => {
             <span class="pano-badge">360°</span>
             <p>${t('tour.pano.lead')}</p>
             <button class="btn btn-primary" data-pano-open>${ico('i-eye')}${t('tour.pano.open')}</button>
-            <small>${t('tour.pano.note')}${PANORAMAS[p.id].dist > 150 ? ' ' + t('tour.pano.far').replace('{m}', Math.round(PANORAMAS[p.id].dist / 10) * 10) : ''}</small>
+            <small>${t('tour.pano.note')}${(PANORAMAS[p.id].dist || 0) > 150 ? ' ' + t('tour.pano.far').replace('{m}', Math.round(PANORAMAS[p.id].dist / 10) * 10) : ''}</small>
           </div>
         </div>
       </div>` : '';
@@ -910,7 +912,7 @@ const openPano = (p) => {
   if (!box) return;
   if (!navigator.onLine) { box.innerHTML = `<div class="pano-off">${ico('i-info')}<p>${t('tour.pano.offline')}</p></div>`; return; }
   box.innerHTML = `<iframe src="${panoURL(PANORAMAS[p.id])}" title="${esc(t('tour.mode.pano') + ': ' + L(p.name))}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    <p class="pano-credit">${t('tour.pano.credit')}</p>`;
+    <p class="pano-credit">${t(PANORAMAS[p.id].g ? 'tour.pano.creditG' : 'tour.pano.credit')}</p>`;
 };
 
 const initTour = (p) => {

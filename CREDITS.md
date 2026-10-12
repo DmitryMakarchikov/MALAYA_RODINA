@@ -16,7 +16,6 @@
 | [brest-tour-5.jpg](https://commons.wikimedia.org/wiki/File:Brest_Fortress_Che%C5%82m_Gate_2023-02-18_2797.jpg) | Mike1979 Russia | CC BY-SA 3.0 |
 | [brest-tour-6.jpg](https://commons.wikimedia.org/wiki/File:Brest_Fortress_Terespol_Gate_2024-09-19_3777.jpg) | Mike1979 Russia | CC BY-SA 3.0 |
 | [bronnaya-cover.jpg](https://commons.wikimedia.org/wiki/File:Bronnaya_Gora_monument_to_about_50000_Jews_1b.jpg) | Avner | CC0 |
-| [bronnaya-tour-1.jpg](https://commons.wikimedia.org/wiki/File:Bronnaya_Gora_road_to_memorial_1c.jpg) | Avner | CC0 |
 | [buynichi-cover.jpg](https://commons.wikimedia.org/wiki/File:%D0%9C%D0%B5%D0%BC%D0%BE%D1%80%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81_%22%D0%91%D1%83%D0%B9%D0%BD%D0%B8%D1%87%D1%81%D0%BA%D0%BE%D0%B5_%D0%BF%D0%BE%D0%BB%D0%B5%22_%D0%BC%D0%B5%D1%81%D1%82%D0%BE_%D0%B1%D0%BE%D0%B5%D0%B2_1941_%D0%B3._-_panoramio_-_Yuriy_Tim_(7).jpg) | Yuriy Tim | CC BY 3.0 |
 | [buynichi-tour-1.jpg](https://commons.wikimedia.org/wiki/File:%D0%91%D1%83%D0%B9%D0%BD%D0%B8%D1%87%D1%81%D0%BA%D0%BE%D0%B5_%D0%BF%D0%BE%D0%BB%D0%B5.jpg) | Андрей Перцев 1967 | CC0 |
 | [buynichi-tour-2.jpg](https://commons.wikimedia.org/wiki/File:%D0%91%D1%83%D0%B9%D0%BD%D0%B8%D1%87%D1%81%D0%BA%D0%BE%D0%B5_%D0%BF%D0%BE%D0%BB%D0%B5_%D0%BF%D0%B0%D0%BC%D1%8F%D1%82%D0%BD%D0%B8%D0%BA.JPG) | Сугакевіч А.Г. | CC BY-SA 3.0 |
