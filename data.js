@@ -882,7 +882,7 @@ const PANORAMAS = {
   novogrudok: { point: [25.839076, 53.598085], dir: 0, dist: 10 },
   grodnokurgan: { point: [23.867549, 53.672512], dir: 102.3, dist: 111 },
   zhiliber: { point: [23.836091, 53.685203], dir: 62.1, dist: 23 },
-  khatyn: { point: [27.940762, 54.333108], dir: 43.8, dist: 60 },
+  khatyn: { point: [27.945586, 54.334367], dir: 286.1, dist: 143 },
   kurgan: { point: [27.898152, 54.019038], dir: 168.5, dist: 16 },
   buynichi: { point: [30.256994, 53.86143], dir: 0, dist: 10 },
   borki: { point: [29.704775, 53.46363], dir: 246.9, dist: 178 },

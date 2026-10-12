@@ -933,7 +933,7 @@ const initTour = (p) => {
   };
   // на ПК карточка сбоку: держим её в видимой части кадра при любой прокрутке
   const placePanel = () => {
-    if (!panel.classList.contains('open') || matchMedia('(max-width: 760px)').matches) { panel.style.top = ''; return; }
+    if (!panel.classList.contains('open') || window.matchMedia?.('(max-width: 760px)').matches) { panel.style.top = ''; return; }
     const vr = view.getBoundingClientRect();
     const want = coveredTop() + 12 - vr.top, max = vr.height - panel.offsetHeight - 16;
     panel.style.top = Math.max(16, Math.min(want, max)) + 'px';
