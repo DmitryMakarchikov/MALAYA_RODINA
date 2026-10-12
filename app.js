@@ -926,7 +926,22 @@ const initTour = (p) => {
   if (!shots.length) return;
   const view = $('#tourView'), zoom = $('#tourZoom'), panel = $('#tourPanel'), back = $('#tourBack');
   let shot = 0;
+  // нижний край шапки и закреплённых вкладок — всё, что выше, закрыто
+  const coveredTop = () => {
+    const tabs = $('.tabs');
+    return Math.max($('.site-header').getBoundingClientRect().bottom, tabs && getComputedStyle(tabs).position === 'sticky' ? tabs.getBoundingClientRect().bottom : 0);
+  };
+  // на ПК карточка сбоку: держим её в видимой части кадра при любой прокрутке
+  const placePanel = () => {
+    if (!panel.classList.contains('open') || matchMedia('(max-width: 760px)').matches) { panel.style.top = ''; return; }
+    const vr = view.getBoundingClientRect();
+    const want = coveredTop() + 12 - vr.top, max = vr.height - panel.offsetHeight - 16;
+    panel.style.top = Math.max(16, Math.min(want, max)) + 'px';
+  };
+  addEventListener('scroll', placePanel, { passive: true });
+  addEventListener('resize', placePanel);
   const reset = () => {
+    panel.style.top = '';
     zoom.style.transform = ''; view.classList.remove('zoomed'); panel.classList.remove('open'); back.hidden = true;
     $$('.hotspot', view).forEach((h) => { h.style.left = h.dataset.x + '%'; h.style.top = h.dataset.y + '%'; });
     $$('.hotspot', view).forEach((h) => h.classList.remove('active')); $('#tourHint').style.opacity = 1;
@@ -953,9 +968,9 @@ const initTour = (p) => {
       ${pts.length > 1 ? `<button class="btn btn-ghost btn-sm" data-tour-next>${t('tour.nextPoint')} →</button>` : ''}`;
     panel.classList.add('open');
     // фото с карточкой целиком под шапкой и закреплёнными вкладками
-    const tabs = $('.tabs'), tb = tabs && getComputedStyle(tabs).position === 'sticky' ? tabs.getBoundingClientRect().bottom : $('.site-header').getBoundingClientRect().bottom;
-    const vr = view.getBoundingClientRect(), gap = 12;
-    if (vr.top < tb + gap || vr.bottom > innerHeight) window.scrollBy({ top: vr.top - tb - gap, behavior: 'smooth' });
+    const vr = view.getBoundingClientRect(), tb = coveredTop();
+    if (vr.top < tb + 12 || vr.bottom > innerHeight) window.scrollBy({ top: vr.top - tb - 12, behavior: 'smooth' });
+    placePanel();
     $('[data-tour-next]', panel)?.addEventListener('click', () => { const hs = $$('.hotspot', view); hs[(i + 1) % hs.length].click(); });
     $('[data-tour-reset]', panel).addEventListener('click', reset);
   };

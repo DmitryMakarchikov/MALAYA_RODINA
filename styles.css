@@ -1124,3 +1124,8 @@ input, select, textarea { font: inherit; color: inherit; }
   .main-nav { display: none; }
   .burger { display: block; }
 }
+
+/* --- Карточка точки фототура: по высоте содержимого, сдвигается под вкладки при прокрутке --- */
+@media (min-width: 761px) {
+  .tour-panel { bottom: auto; max-height: calc(100% - 32px); transition: transform .45s var(--ease), top .2s ease-out; }
+}
