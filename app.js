@@ -1604,10 +1604,121 @@ const haversine = ([a1, o1], [a2, o2]) => {
   const h = Math.sin((a2 - a1) * r / 2) ** 2 + Math.cos(a1 * r) * Math.cos(a2 * r) * Math.sin((o2 - o1) * r / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
 };
+/* «Дорога наугад»: случайное путешествие по заданным условиям.
+   Пустой маршрут — собирается новый; иначе места добавляются после последней остановки. */
+const trip = Object.assign({ regions: [], types: [], count: 3, spread: 'near', open: false }, store.get('dp_trip', {}));
+let tripAdded = new Set();
+const TRIP_COUNTS = [2, 3, 4, 5];
+const saveTrip = () => store.set('dp_trip', trip);
+const genTrip = () => {
+  const reg = new Set(trip.regions), typ = new Set(trip.types);
+  let pool = PLACES.filter((p) => !route.includes(p.id) && (!reg.size || reg.has(p.region)) && (!typ.size || typ.has(p.type)));
+  if (!pool.length) return [];
+  const n = Math.min(trip.count, pool.length);
+  let cur = route.length ? byId(route[route.length - 1]).coords : null;
+  const take = (p) => { pool = pool.filter((x) => x !== p); cur = p.coords; return p; };
+  const nearest = (from, list) => list.slice().sort((a, b) => haversine(from, a.coords) - haversine(from, b.coords));
+  const picked = [];
+  if (trip.spread === 'far') {
+    // вразброс: случайные места, затем порядок «к ближайшему», чтобы не петлять
+    let rest = shuffle(pool).slice(0, n);
+    if (!cur) { picked.push(rest[0]); cur = rest[0].coords; rest = rest.slice(1); }
+    while (rest.length) { const p = nearest(cur, rest)[0]; picked.push(p); cur = p.coords; rest = rest.filter((x) => x !== p); }
+  } else {
+    // поближе: от случайного старта (или от последней остановки) к одному из двух ближайших
+    if (!cur) picked.push(take(pool[Math.floor(Math.random() * pool.length)]));
+    while (picked.length < n && pool.length) {
+      const near = nearest(cur, pool).slice(0, 2);
+      picked.push(take(near[Math.floor(Math.random() * near.length)]));
+    }
+  }
+  return picked.map((p) => p.id);
+};
+const tripHTML = () => {
+  const more = route.length > 0;
+  const chip = (attr, val, on, label) => `<button class="type-chip" ${attr}="${val}" aria-pressed="${on}">${label}</button>`;
+  return `
+  <section class="block trip${trip.open ? ' open' : ''}" aria-labelledby="tripTitle">
+    <div class="trip-dice" aria-hidden="true">${ico('i-dice')}</div>
+    <div class="trip-text">
+      <span class="block-label">${t('trip.kicker')}</span>
+      <h3 id="tripTitle">${t('trip.title')}</h3>
+      <p>${t(more ? 'trip.text.more' : 'trip.text.empty')}</p>
+    </div>
+    <div class="trip-actions">
+      <button class="btn btn-primary" id="tripGo">${ico('i-dice')}${t(more ? 'trip.add' : 'trip.go')}</button>
+      <button class="btn btn-ghost btn-sm" id="tripTune" aria-expanded="${trip.open}" aria-controls="tripOpts">${ico('i-tune')}${t('trip.settings')}${ico('i-right', 'icon trip-chev')}</button>
+    </div>
+    <div class="trip-opts" id="tripOpts"${trip.open ? '' : ' hidden'}>
+      <div class="trip-field"><span class="trip-lbl">${t('trip.regions')}</span>
+        <div class="type-chips">${chip('data-tr', 'all', !trip.regions.length, t('trip.any'))}${Object.entries(REGIONS).map(([k, r]) => chip('data-tr', k, trip.regions.includes(k), L(r.name))).join('')}</div></div>
+      <div class="trip-field"><span class="trip-lbl">${t('trip.types')}</span>
+        <div class="type-chips">${chip('data-tt', 'all', !trip.types.length, t('trip.any'))}${Object.entries(TYPES).map(([k, tp]) => chip('data-tt', k, trip.types.includes(k), `<i class="type-dot" style="background:${tp.color}"></i>${L(tp.short)}`)).join('')}</div></div>
+      <div class="trip-field trip-row">
+        <div><span class="trip-lbl">${t('trip.count')}</span><div class="seg">${TRIP_COUNTS.map((c) => `<button data-tc="${c}" aria-pressed="${trip.count === c}">${c}</button>`).join('')}<input class="seg-input${TRIP_COUNTS.includes(trip.count) ? '' : ' on'}" id="tripCount" type="number" min="1" max="${PLACES.length}" inputmode="numeric" placeholder="${t('trip.own')}" aria-label="${t('trip.ownAria')}" value="${TRIP_COUNTS.includes(trip.count) ? '' : trip.count}"></div></div>
+        <div><span class="trip-lbl">${t('trip.spread')}</span><div class="seg">${['near', 'far'].map((s) => `<button data-ts="${s}" aria-pressed="${trip.spread === s}">${t('trip.' + s)}</button>`).join('')}</div></div>
+      </div>
+      <button class="trip-hide" id="tripHide" aria-controls="tripOpts">${ico('i-left', 'icon rot90')}${t('trip.hide')}</button>
+    </div>
+  </section>`;
+};
+const bindTrip = () => {
+  const box = $('.trip'); if (!box) return;
+  const toggleOpts = () => {
+    trip.open = !trip.open; saveTrip();
+    box.classList.toggle('open', trip.open); $('#tripOpts').hidden = !trip.open;
+    $('#tripTune').setAttribute('aria-expanded', String(trip.open));
+    if (!trip.open) $('#tripTune').focus({ preventScroll: true });
+  };
+  $('#tripTune').addEventListener('click', toggleOpts);
+  $('#tripHide').addEventListener('click', toggleOpts);
+  const syncCount = () => {
+    $$('[data-tc]', box).forEach((x) => x.setAttribute('aria-pressed', String(+x.dataset.tc === trip.count)));
+    $('#tripCount').classList.toggle('on', !TRIP_COUNTS.includes(trip.count));
+  };
+  // своё число мест: от 1 до числа всех мест; пустое поле — возврат к 3
+  $('#tripCount').addEventListener('input', (e) => {
+    const v = parseInt(e.target.value, 10);
+    trip.count = Number.isFinite(v) ? clamp(v, 1, PLACES.length) : 3;
+    saveTrip(); syncCount();
+  });
+  $('#tripCount').addEventListener('change', (e) => { if (e.target.value) e.target.value = trip.count; });
+  // «Любые» снимает остальные отметки; пустой выбор = любые
+  const multi = (key, val) => {
+    if (val === 'all') trip[key] = [];
+    else trip[key] = trip[key].includes(val) ? trip[key].filter((x) => x !== val) : [...trip[key], val];
+  };
+  $('#tripOpts').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.tr) multi('regions', b.dataset.tr);
+    else if (b.dataset.tt) multi('types', b.dataset.tt);
+    else if (b.dataset.tc) { trip.count = +b.dataset.tc; $('#tripCount').value = ''; }
+    else if (b.dataset.ts) trip.spread = b.dataset.ts;
+    else return;
+    saveTrip();
+    $$('[data-tr]', box).forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.tr === 'all' ? !trip.regions.length : trip.regions.includes(x.dataset.tr))));
+    $$('[data-tt]', box).forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.tt === 'all' ? !trip.types.length : trip.types.includes(x.dataset.tt))));
+    syncCount();
+    $$('[data-ts]', box).forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.ts === trip.spread)));
+  });
+  $('#tripGo').addEventListener('click', () => {
+    const ids = genTrip();
+    if (!ids.length) { toast(t('trip.none'), 'i-info'); return; }
+    box.classList.add('rolling');
+    $('#tripGo').disabled = true;
+    setTimeout(() => {
+      route = [...route, ...ids]; tripAdded = new Set(ids);
+      saveRoute(); renderRoute();
+      toast(t('trip.done').replace('{n}', pl(ids.length, 'pl.place')), 'i-dice');
+    }, 650);
+  });
+};
+
 const renderRoute = () => {
   const root = $('#routeRoot');
   if (!route.length) {
-    root.innerHTML = `<div class="block block-pad empty route-empty">${ico('i-road')}<p>${t('route.empty')}</p><a class="btn btn-primary" href="#/map">${ico('i-map')}${t('btn.toMap')}</a></div>`;
+    root.innerHTML = `${tripHTML()}<div class="block block-pad empty route-empty">${ico('i-road')}<p>${t('route.empty')}</p><a class="btn btn-primary" href="#/map">${ico('i-map')}${t('btn.toMap')}</a></div>`;
+    bindTrip();
     return;
   }
   const places = route.map(byId);
@@ -1617,13 +1728,13 @@ const renderRoute = () => {
   const yandex = `https://yandex.by/maps/?rtext=${ll.join('~')}&rtt=auto`;
   const google = `https://www.google.com/maps/dir/${ll.join('/')}`;
   const proj = places.map((p) => project(p.coords));
-  root.innerHTML = `
+  root.innerHTML = `${tripHTML()}
     <div class="route-layout">
       <div class="block route-box">
         <div class="results-head"><span>${t('route.stops')}</span><b>${route.length}</b></div>
         <ol class="route-list" id="routeList">
           ${places.map((p, i) => `
-          <li class="route-item" draggable="true" data-i="${i}">
+          <li class="route-item${tripAdded.has(p.id) ? ' fresh' : ''}" draggable="true" data-i="${i}">
             <span class="route-num">${i + 1}</span>
             <img src="${img(p)}" alt="" loading="lazy">
             <span class="result-info"><a class="t" href="#/place/${p.id}">${esc(L(p.name))}</a><span class="m">${typeDot(p)}${esc(L(p.district))}</span></span>
@@ -1634,7 +1745,6 @@ const renderRoute = () => {
             </span>
           </li>`).join('')}
         </ol>
-        <p class="form-note route-hint">${t('route.hint')}</p>
       </div>
       <aside class="stack">
         <div class="block route-map">
@@ -1674,6 +1784,8 @@ const renderRoute = () => {
   list.addEventListener('dragover', (e) => { e.preventDefault(); const li = e.target.closest('.route-item'); $$('.route-item', list).forEach((x) => x.classList.toggle('over', x === li)); });
   list.addEventListener('drop', (e) => { e.preventDefault(); const li = e.target.closest('.route-item'); if (li && dragI !== null) move(dragI, +li.dataset.i); dragI = null; });
   $('#routeClear').addEventListener('click', () => { route = []; saveRoute(); renderRoute(); });
+  bindTrip();
+  tripAdded = new Set();
 };
 
 /* ============================================================

@@ -1002,7 +1002,6 @@ input, select, textarea { font: inherit; color: inherit; }
 .round-btn.sm { width: 36px; height: 36px; }
 .round-btn:disabled { opacity: .35; pointer-events: none; }
 .icon.rot90 { transform: rotate(90deg); }
-.route-hint { padding: 0 16px 16px; }
 .route-map { padding: 14px; background: radial-gradient(ellipse at 50% 40%, #f6f4f0, var(--bg-alt)); }
 .route-map svg { width: 100%; height: auto; display: block; }
 .route-map .region { cursor: default; }
@@ -1168,4 +1167,45 @@ input, select, textarea { font: inherit; color: inherit; }
 @media (hover: none) {
   .peek { transform: none; padding: 8px 12px; font-size: 11px; }
   .tile-dots { transform: translateY(-36px); }
+}
+
+/* --- «Дорога наугад»: генератор путешествия на странице маршрута --- */
+.trip { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px 24px; align-items: center; padding: 24px 26px; margin-bottom: 22px; background: linear-gradient(120deg, var(--gold-soft), var(--red-softer) 70%), var(--bg-card); border-color: rgba(185,141,85,.5); }
+.trip-dice { width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; background: linear-gradient(150deg, var(--red-2), var(--red-3)); color: #fff; box-shadow: 0 10px 24px rgba(158,28,37,.3); }
+.trip-dice .icon { width: 34px; height: 34px; }
+.trip-text .block-label { margin-bottom: 4px; }
+.trip-text h3 { font-family: var(--f-display); font-size: 26px; line-height: 1.15; margin-bottom: 4px; }
+.trip-text p { font-size: 14.5px; color: var(--ink-2); max-width: 60ch; }
+.trip-actions { display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+.trip-actions .btn-primary .icon { transition: transform .4s var(--ease); }
+.trip-actions .btn-primary:hover .icon { transform: rotate(-20deg); }
+.trip.rolling .trip-dice .icon, .trip.rolling .btn-primary .icon { animation: diceRoll .65s var(--ease); }
+@keyframes diceRoll { 0% { transform: rotate(0) scale(1); } 50% { transform: rotate(200deg) scale(1.2); } 100% { transform: rotate(360deg) scale(1); } }
+.trip-opts { grid-column: 1 / -1; display: grid; gap: 16px; padding-top: 18px; border-top: 1.5px dashed rgba(185,141,85,.55); }
+.trip-opts[hidden] { display: none; }
+.trip-lbl { display: block; font-family: var(--f-mono); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.trip-row { display: flex; flex-wrap: wrap; gap: 16px 28px; }
+.trip .seg { justify-content: flex-start; align-items: center; }
+.seg-input { width: 74px; height: 36px; padding: 0 10px; border: 1.5px dashed var(--line-2); border-radius: 100px; background: transparent; font: inherit; font-size: 14px; font-weight: 500; color: var(--ink); text-align: center; -moz-appearance: textfield; transition: border-color .2s, background .2s, color .2s; }
+.seg-input::-webkit-outer-spin-button, .seg-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.seg-input::placeholder { color: var(--ink-3); }
+.seg-input:hover { border-color: var(--ink-3); }
+.seg-input:focus { outline: none; border-style: solid; border-color: var(--red); }
+.seg-input.on { border-style: solid; border-color: var(--red); background: var(--red); color: #fff; }
+.trip #tripTune[aria-expanded="true"] { border-color: var(--gold-2); color: var(--gold-2); }
+/* стрелка у «Настроить» смотрит вниз, когда закрыто, и вверх, когда открыто */
+.trip-chev { width: 16px; height: 16px; transform: rotate(90deg); transition: transform .3s var(--ease); }
+.trip #tripTune[aria-expanded="true"] .trip-chev { transform: rotate(-90deg); }
+.trip-hide { justify-self: end; display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1.5px solid var(--line-2); border-radius: 100px; background: var(--bg-card); font-family: var(--f-mono); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); transition: color .2s, background .2s; }
+.trip-hide:hover { color: var(--red); border-color: var(--red); }
+.trip-hide .icon { width: 16px; height: 16px; }
+/* новые остановки из «Дороги наугад» подсвечиваются */
+.route-item.fresh { animation: freshIn .9s var(--ease); border-color: var(--gold); background: var(--gold-soft); }
+@keyframes freshIn { from { opacity: 0; transform: translateY(8px); } }
+@media (max-width: 760px) {
+  .trip { grid-template-columns: auto minmax(0, 1fr); padding: 20px; }
+  .trip-dice { width: 52px; height: 52px; border-radius: 14px; }
+  .trip-dice .icon { width: 28px; height: 28px; }
+  .trip-text h3 { font-size: 22px; }
+  .trip-actions { grid-column: 1 / -1; }
 }
