@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Дорогами памяти</title>
 <meta name="description" content="Интерактивный путеводитель по 30 памятным местам Беларуси: история, фототуры, архив, викторина. Работает офлайн, на русском и белорусском языках.">
-<meta name="theme-color" content="#8b1a1a">
+<meta name="theme-color" content="#9e1c25">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%238b1a1a'/%3E%3Cpath d='M12 4 10.2 9H5l4.2 3-1.6 5L12 14l4.4 3-1.6-5L19 9h-5.2z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="fonts/fonts.css">
 <link rel="stylesheet" href="styles.css">
@@ -18,7 +18,7 @@
 <!-- Набор SVG-иконок (используются через <use href="#i-...">) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b1a1a"/><stop offset="1" stop-color="#c9a063"/></linearGradient>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9e1c25"/><stop offset="1" stop-color="#b98d55"/></linearGradient>
   </defs>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M12 3 2 12h3v8h6v-6h2v6h6v-8h3z"/></symbol>
   <symbol id="i-map" viewBox="0 0 24 24"><path d="m20.5 3-.16.03L15 5.1 9 3 3.36 4.9a.5.5 0 0 0-.36.48V20.5a.5.5 0 0 0 .66.47L9 18.9l6 2.1 5.64-1.9a.5.5 0 0 0 .36-.48V3.5a.5.5 0 0 0-.5-.5zM15 19l-6-2.11V5l6 2.11z"/></symbol>
@@ -28,6 +28,7 @@
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></symbol>
   <symbol id="i-left" viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z"/></symbol>
   <symbol id="i-right" viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M11 20V7.8l-5.6 5.6L4 12l8-8 8 8-1.4 1.4L13 7.8V20z"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m12 4-1.4 1.4 5.6 5.6H4v2h12.2l-5.6 5.6L12 20l8-8z"/></symbol>
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 14 15.4l.3.3v.8l5 5 1.5-1.5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></symbol>
@@ -67,7 +68,6 @@
       <span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 9.5 9H3l5.3 4-2 7L12 16l5.7 4-2-7L21 9h-6.5z"/></svg></span>
       <span class="logo-text">
         <span class="logo-title" data-i18n="siteName">Дорогами памяти</span>
-        <span class="logo-sub" data-i18n="siteSub">Интерактивный путеводитель</span>
       </span>
     </a>
     <nav class="main-nav" data-i18n-aria="nav.main">
@@ -81,7 +81,7 @@
     <div class="header-tools">
       <span class="opened-chip" id="openedChip"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><b id="openedCount">0/30</b></span>
       <div class="lang-switch" role="group" data-i18n-aria="lang.label">
-        <button data-lang="ru" aria-pressed="true"><svg class="flag" viewBox="0 0 9 6" aria-hidden="true"><rect width="9" height="2" fill="#fff"/><rect y="2" width="9" height="2" fill="#0039a6"/><rect y="4" width="9" height="2" fill="#d52b1e"/></svg>РУС</button><button data-lang="be" aria-pressed="false"><svg class="flag" viewBox="0 0 18 9" aria-hidden="true"><rect width="18" height="6" fill="#c8313e"/><rect y="6" width="18" height="3" fill="#4aa657"/><rect width="2" height="9" fill="#fff"/><path d="M1 .5l.6.9-.6.9-.6-.9zM1 2.7l.6.9-.6.9-.6-.9zM1 4.9l.6.9-.6.9-.6-.9zM1 7.1l.6.9-.6.9-.6-.9z" fill="#c8313e"/></svg>БЕЛ</button>
+        <button data-lang="ru" aria-pressed="true"><svg class="flag" viewBox="0 0 9 6" preserveAspectRatio="none" aria-hidden="true"><rect width="9" height="2" fill="#fff"/><rect y="2" width="9" height="2" fill="#0039a6"/><rect y="4" width="9" height="2" fill="#d52b1e"/></svg>РУС</button><button data-lang="be" aria-pressed="false"><svg class="flag" viewBox="0 0 18 9" preserveAspectRatio="none" aria-hidden="true"><rect width="18" height="6" fill="#c8313e"/><rect y="6" width="18" height="3" fill="#4aa657"/><rect width="2" height="9" fill="#fff"/><path d="M1 .5l.6.9-.6.9-.6-.9zM1 2.7l.6.9-.6.9-.6-.9zM1 4.9l.6.9-.6.9-.6-.9zM1 7.1l.6.9-.6.9-.6-.9z" fill="#c8313e"/></svg>БЕЛ</button>
       </div>
       <button class="burger" id="burger" data-i18n-aria="menu.open" aria-expanded="false" aria-controls="mobileNav"><span></span><span></span><span></span></button>
     </div>
@@ -91,7 +91,7 @@
 <!-- Мобильное меню -->
 <nav class="mobile-nav" id="mobileNav" data-i18n-aria="nav.mobile">
   <div class="lang-switch lang-switch-lg" role="group" data-i18n-aria="lang.label">
-    <button data-lang="ru" aria-pressed="true"><svg class="flag" viewBox="0 0 9 6" aria-hidden="true"><rect width="9" height="2" fill="#fff"/><rect y="2" width="9" height="2" fill="#0039a6"/><rect y="4" width="9" height="2" fill="#d52b1e"/></svg>РУС</button><button data-lang="be" aria-pressed="false"><svg class="flag" viewBox="0 0 18 9" aria-hidden="true"><rect width="18" height="6" fill="#c8313e"/><rect y="6" width="18" height="3" fill="#4aa657"/><rect width="2" height="9" fill="#fff"/><path d="M1 .5l.6.9-.6.9-.6-.9zM1 2.7l.6.9-.6.9-.6-.9zM1 4.9l.6.9-.6.9-.6-.9zM1 7.1l.6.9-.6.9-.6-.9z" fill="#c8313e"/></svg>БЕЛ</button>
+    <button data-lang="ru" aria-pressed="true"><svg class="flag" viewBox="0 0 9 6" preserveAspectRatio="none" aria-hidden="true"><rect width="9" height="2" fill="#fff"/><rect y="2" width="9" height="2" fill="#0039a6"/><rect y="4" width="9" height="2" fill="#d52b1e"/></svg>РУС</button><button data-lang="be" aria-pressed="false"><svg class="flag" viewBox="0 0 18 9" preserveAspectRatio="none" aria-hidden="true"><rect width="18" height="6" fill="#c8313e"/><rect y="6" width="18" height="3" fill="#4aa657"/><rect width="2" height="9" fill="#fff"/><path d="M1 .5l.6.9-.6.9-.6-.9zM1 2.7l.6.9-.6.9-.6-.9zM1 4.9l.6.9-.6.9-.6-.9zM1 7.1l.6.9-.6.9-.6-.9z" fill="#c8313e"/></svg>БЕЛ</button>
   </div>
   <a href="#/home" class="nav-link" data-nav="home"><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg><span data-i18n="nav.home">Главная</span></a>
   <a href="#/map" class="nav-link" data-nav="map"><svg class="icon" aria-hidden="true"><use href="#i-map"/></svg><span data-i18n="nav.map">Карта</span></a>
@@ -140,26 +140,22 @@
         <header class="section-head reveal">
           <span class="kicker" data-i18n="eras.kicker">Одно место — три времени</span>
           <h2 class="section-title" id="erasTitle" data-i18n-html="eras.title">Каким было, каким стало, <em>как сохранить</em></h2>
-          <p class="section-sub" data-i18n="eras.sub">Каждое памятное место раскрывается на трёх вкладках.</p>
         </header>
         <div class="eras">
           <article class="block era reveal" data-num="01" style="--era-c: var(--red); --era-soft: var(--red-soft)">
             <div class="era-icon"><svg class="icon" aria-hidden="true"><use href="#i-past"/></svg></div>
             <h3 data-i18n="tab.past">Прошлое</h3>
             <p data-i18n="era.past.p"></p>
-            <ul><li data-i18n="era.past.1"></li><li data-i18n="era.past.2"></li><li data-i18n="era.past.3"></li></ul>
           </article>
           <article class="block era reveal" data-num="02" style="--era-c: var(--blue); --era-soft: rgba(44,74,110,.12)">
             <div class="era-icon"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></div>
             <h3 data-i18n="tab.present">Настоящее</h3>
             <p data-i18n="era.present.p"></p>
-            <ul><li data-i18n="era.present.1"></li><li data-i18n="era.present.2"></li><li data-i18n="era.present.3"></li></ul>
           </article>
           <article class="block era reveal" data-num="03" style="--era-c: var(--gold-2); --era-soft: var(--gold-soft)">
             <div class="era-icon"><svg class="icon" aria-hidden="true"><use href="#i-bulb"/></svg></div>
             <h3 data-i18n="tab.future">Будущее</h3>
             <p data-i18n="era.future.p"></p>
-            <ul><li data-i18n="era.future.1"></li><li data-i18n="era.future.2"></li><li data-i18n="era.future.3"></li></ul>
           </article>
         </div>
       </section>
@@ -169,7 +165,6 @@
         <header class="section-head reveal">
           <span class="kicker" data-i18n="regions.kicker">География памяти</span>
           <h2 class="section-title" id="regionsTitle" data-i18n-html="regions.title">Шесть областей — <em>тридцать мест</em></h2>
-          <p class="section-sub" data-i18n="regions.sub"></p>
         </header>
         <div class="regions" id="regionCards"></div>
       </section>
@@ -199,7 +194,6 @@
       <header class="section-head">
         <span class="kicker" data-i18n="map.kicker">Главный экран</span>
         <h2 class="section-title" id="mapTitle" data-i18n-html="map.title">Карта <em>памятных мест</em></h2>
-        <p class="section-sub" data-i18n="map.sub"></p>
       </header>
 
       <div class="map-layout">
@@ -273,7 +267,6 @@
       <header class="section-head">
         <span class="kicker" data-i18n="heroes.kicker">Лица памяти</span>
         <h2 class="section-title" id="heroesTitle" data-i18n-html="heroes.title">Герои <em>и места</em></h2>
-        <p class="section-sub" data-i18n="heroes.sub"></p>
       </header>
       <div class="toolbar"><div class="seg" id="heroFilter" role="group" data-i18n-aria="heroes.filter"></div></div>
       <div class="heroes" id="heroesGrid"></div>
@@ -288,7 +281,6 @@
       <header class="section-head">
         <span class="kicker" data-i18n="arch.kicker">Документы · фото · записи</span>
         <h2 class="section-title" id="archiveTitle" data-i18n-html="arch.title">Голоса <em>и документы</em></h2>
-        <p class="section-sub" data-i18n="arch.sub"></p>
       </header>
 
       <div class="block archive-tools">
@@ -393,7 +385,7 @@
   <div class="container footer-inner">
     <a href="#/home" class="logo" data-i18n-aria="logo.aria">
       <span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 9.5 9H3l5.3 4-2 7L12 16l5.7 4-2-7L21 9h-6.5z"/></svg></span>
-      <span class="logo-text"><span class="logo-title" data-i18n="siteName">Дорогами памяти</span><span class="logo-sub" data-i18n="siteSub">Интерактивный путеводитель</span></span>
+      <span class="logo-text"><span class="logo-title" data-i18n="siteName">Дорогами памяти</span></span>
     </a>
     <div>
       <p class="footer-text" data-i18n="footer.text"></p>
@@ -405,7 +397,7 @@
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true"><div id="overlayBody" class="overlay-body"></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
-<button class="to-top" id="toTop" data-i18n-aria="toTop"><svg class="icon" aria-hidden="true"><use href="#i-left" transform="rotate(90 12 12)"/></svg></button>
+<button class="to-top" id="toTop" data-i18n-aria="toTop"><svg class="icon" aria-hidden="true"><use href="#i-up"/></svg></button>
 
 <script src="i18n.js"></script>
 <script src="data.js"></script>

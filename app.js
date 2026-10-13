@@ -286,7 +286,7 @@ const slider = {
           <h2 class="slide-title">${L(s.title)}</h2>
           <p class="slide-text">${esc(L(s.text))}</p>
           <div class="slide-actions">
-            ${p ? `<a class="btn btn-primary" href="#/place/${p.id}">${t('btn.story')} ${ico('i-arrow')}</a><a class="btn btn-light" href="#/place/${p.id}/present">${ico('i-tour')}${t('btn.walk')}</a>`
+            ${p ? `<a class="btn btn-primary" href="#/place/${p.id}">${ico('i-archive')}${t('btn.story')}</a><a class="btn btn-light" href="#/place/${p.id}/present">${ico('i-tour')}${t('btn.walk')}</a>`
                 : `<button class="btn btn-primary" data-archive-place="${s.archive}">${ico('i-archive')}${t('btn.openArchive')}</button><a class="btn btn-light" href="#/map">${ico('i-map')}${t('btn.toMap')}</a>`}
           </div>
         </div>
@@ -355,6 +355,9 @@ const renderHome = () => {
   initTileCarousels($('#rail'));
 };
 
+// Полупрозрачная плашка-подсказка, выезжает на снимок при наведении на карточку
+const peekHTML = (icon, key, top = false) => `<span class="peek${top ? ' peek-top' : ''}" aria-hidden="true">${ico(icon)}<span>${t(key)}</span>${ico('i-arrow')}</span>`;
+
 // Карточка места с мини-каруселью из трёх снимков
 const tileHTML = (p) => {
   const shots = [...new Set([img(p), ...tourOf(p).map((s) => s.img)])].slice(0, 3);
@@ -363,6 +366,7 @@ const tileHTML = (p) => {
     <span class="place-tile-img" data-carousel>
       ${shots.map((s, i) => `<img src="${s}" alt="" loading="lazy"${i ? '' : ' class="on"'}>`).join('')}
       <span class="chip chip-dark">${typeDot(p)}${L(TYPES[p.type].short)}</span>
+      ${peekHTML('i-past', 'peek.place')}
       ${shots.length > 1 ? `<span class="tile-dots">${shots.map((_, i) => `<i${i ? '' : ' class="on"'}></i>`).join('')}</span>` : ''}
     </span>
     <span class="place-tile-body">
@@ -408,7 +412,7 @@ const renderDaily = () => {
     <blockquote class="daily-quote">${esc(qt.text)}</blockquote>
     <p class="daily-cap">— ${esc(L(qt.cap))}</p>
     <p class="form-note">${t('source')}: ${esc(qt.src)}</p>
-    <button class="btn btn-outline btn-sm" data-place="${qt.place}">${ico('i-pin')}${t('btn.story')}</button>`;
+    <button class="btn btn-outline btn-sm" data-place="${qt.place}">${ico('i-archive')}${t('btn.story')}</button>`;
 };
 
 /* ============================================================
@@ -421,6 +425,8 @@ const project = ([lat, lng]) => ({
   y: (PROJ.y0 + (PROJ.lat1 - lat) / (PROJ.lat1 - PROJ.lat0) * (PROJ.y1 - PROJ.y0)) / PROJ.H * 100
 });
 
+// Маркеры почти в одной точке (Гродно) чуть разведены, чтобы по каждому можно было попасть; сдвиг в % холста
+const PIN_NUDGE = { fort2: [-0.4, 0], zhiliber: [1.4, 0], grodnokurgan: [4.8, -0.3] };
 const filters = { search: '', region: 'all', district: 'all', types: new Set(), tour: false, archive: false, audio: false };
 const pinSVG = (color) => `<svg viewBox="0 0 30 40" aria-hidden="true"><path d="M15 0C6.7 0 0 6.7 0 15c0 11 15 25 15 25s15-14 15-25C30 6.7 23.3 0 15 0z" fill="${color}" stroke="#fff" stroke-width="2.5"/><circle cx="15" cy="15" r="5.5" fill="#fff"/></svg>`;
 
@@ -433,8 +439,8 @@ const mapView = {
     // маркеры: три случайных пульсируют, чтобы привлечь внимание
     const pulse = new Set(shuffle(PLACES).slice(0, 3).map((p) => p.id));
     $('#mapPins').innerHTML = PLACES.map((p) => {
-      const { x, y } = project(p.coords);
-      return `<button class="pin${pulse.has(p.id) ? ' pulse' : ''}" data-pin="${p.id}" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%">${pinSVG(TYPES[p.type].color)}</button>`;
+      const { x, y } = project(p.coords), [dx, dy] = PIN_NUDGE[p.id] || [0, 0];
+      return `<button class="pin${pulse.has(p.id) ? ' pulse' : ''}" data-pin="${p.id}" style="left:${(x + dx).toFixed(2)}%;top:${(y + dy).toFixed(2)}%">${pinSVG(TYPES[p.type].color)}</button>`;
     }).join('');
     this.labelPins();
     $$('.pin', this.vp).forEach((b) => {
@@ -473,6 +479,7 @@ const mapView = {
     this.canvas.style.setProperty('--k', this.k);
     this.vp.classList.toggle('zoomed', this.k > 1.05);
   },
+
   // приближение к точке (cx, cy — координаты внутри окна карты)
   zoomAt(k2, cx, cy, animate = false) {
     k2 = clamp(k2, 1, 8);
@@ -526,7 +533,10 @@ const popupHTML = (p) => `
       <div class="pop-loc">${esc(L(p.district))} · ${L(REGIONS[p.region].name)} ${t('regionShort')}</div>
       <p>${esc(L(p.short))}</p>
       <div class="pop-mats">${matChips(p) || `<span class="chip">${ico('i-doc')}${t('chip.history')}</span>`}</div>
-      <a class="btn btn-primary btn-sm" href="#/place/${p.id}">${t('btn.story')} ${ico('i-arrow')}</a>
+      <div class="pop-actions">
+        <a class="btn btn-primary btn-sm" href="#/place/${p.id}">${ico('i-archive')}${t('btn.story')}</a>
+        <button class="btn btn-sm route-btn route-ico" data-route-toggle="${p.id}"></button>
+      </div>
     </div>
   </div>`;
 let popPlace = null;
@@ -535,6 +545,7 @@ const openPop = (p) => {
   if (!pin) return;
   popPlace = p.id;
   pop.innerHTML = popupHTML(p);
+  $$('[data-route-toggle]', pop).forEach(routeBtnState);
   pop.hidden = false;
   $$('.pin.sel').forEach((x) => x.classList.remove('sel'));
   pin.classList.add('sel');
@@ -664,12 +675,19 @@ const toggleRoute = (id) => {
   route = inRoute ? route.filter((x) => x !== id) : [...route, id];
   saveRoute();
   toast(t(inRoute ? 'route.removed' : 'route.added'), 'i-road');
-  $$(`[data-route-toggle="${id}"]`).forEach(routeBtnState);
+  $$(`[data-route-toggle="${id}"]`).forEach((b) => {
+    routeBtnState(b);
+    b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump');
+  });
 };
+// Кнопка «В маршрут»: с подписью или (в попапе карты) только значок с подсказкой
 const routeBtnState = (b) => {
-  const on = route.includes(b.dataset.routeToggle);
+  const on = route.includes(b.dataset.routeToggle), label = t(on ? 'route.inRoute' : 'route.add');
   b.setAttribute('aria-pressed', String(on));
-  b.innerHTML = `${ico(on ? 'i-check' : 'i-plus')}${t(on ? 'route.inRoute' : 'route.add')}`;
+  if (b.classList.contains('route-ico')) {
+    b.setAttribute('aria-label', label); b.title = label;
+    b.innerHTML = `${ico('i-road')}<i class="route-ico-badge">${ico(on ? 'i-check' : 'i-plus')}</i>`;
+  } else b.innerHTML = `<span class="route-btn-ico">${ico(on ? 'i-check' : 'i-plus')}</span>${label}`;
 };
 
 /* ============================================================
@@ -708,7 +726,7 @@ const renderPlace = (id, tab = 'past') => {
         <div class="place-cover-loc">${ico('i-pin')}${esc(L(p.district))} · ${L(REGIONS[p.region].name)} ${t('regionWord')}</div>
         <p class="place-cover-desc">${esc(L(p.short))}</p>
         <div class="cover-actions">
-          <button class="btn btn-light btn-sm" data-route-toggle="${p.id}"></button>
+          <button class="btn btn-sm route-btn" data-route-toggle="${p.id}"></button>
           <a class="btn btn-ghost-light btn-sm" href="#/place/${p.id}/present">${ico('i-tour')}${t('btn.walk')}</a>
         </div>
       </div>
@@ -734,7 +752,7 @@ const renderPlace = (id, tab = 'past') => {
           </div>
           ${archPhotos.length ? `<div class="block block-pad">
             <h3 class="block-title">${ico('i-photo')}${t('past.photos')}</h3>
-            <div class="past-photos">${archPhotos.map((a) => `<figure class="past-photo${a.old ? ' old' : ''}" data-arch-zoom="${a.id}"><img src="${a.img}" alt="${esc(L(a.title))}" loading="lazy"><figcaption><b>${esc(L(a.title))}</b><span>${esc(L(a.date))} · ${esc(a.src)}</span></figcaption></figure>`).join('')}</div>
+            <div class="past-photos">${archPhotos.map((a) => `<figure class="past-photo${a.old ? ' old' : ''}" data-arch-zoom="${a.id}"><img src="${a.img}" alt="${esc(L(a.title))}" loading="lazy">${peekHTML('i-search', 'peek.zoom', true)}<figcaption><b>${esc(L(a.title))}</b><span>${esc(L(a.date))} · ${esc(a.src)}</span></figcaption></figure>`).join('')}</div>
           </div>` : ''}
           <div class="block block-pad">
             <h3 class="block-title">${ico('i-person')}${t('past.memories')}</h3>
@@ -1020,34 +1038,34 @@ const initTour = (p) => {
 /* ---------- Будущее: проблема, предложение, визуализация, статус ---------- */
 // Макеты, накладываемые на фотографию: стенд, табличка с QR-кодом, навес со схемой
 const svgLabel = (p) => esc(shortLabel(p).toUpperCase().slice(0, 22));
-const QR_G = `<g fill="#1b1915"><rect x="4" y="4" width="14" height="14"/><rect x="34" y="4" width="14" height="14"/><rect x="4" y="34" width="14" height="14"/><rect x="22" y="22" width="6" height="6"/><rect x="30" y="30" width="6" height="6"/><rect x="38" y="38" width="10" height="10"/><rect x="22" y="40" width="6" height="8"/><rect x="8" y="8" width="6" height="6" fill="#fff"/><rect x="38" y="8" width="6" height="6" fill="#fff"/><rect x="8" y="38" width="6" height="6" fill="#fff"/></g>`;
+const QR_G = `<g fill="#16181b"><rect x="4" y="4" width="14" height="14"/><rect x="34" y="4" width="14" height="14"/><rect x="4" y="34" width="14" height="14"/><rect x="22" y="22" width="6" height="6"/><rect x="30" y="30" width="6" height="6"/><rect x="38" y="38" width="10" height="10"/><rect x="22" y="40" width="6" height="8"/><rect x="8" y="8" width="6" height="6" fill="#fff"/><rect x="38" y="8" width="6" height="6" fill="#fff"/><rect x="8" y="38" width="6" height="6" fill="#fff"/></g>`;
 const OVERLAYS = {
   stand: (p) => `<svg viewBox="0 0 200 270" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <rect x="34" y="170" width="10" height="100" fill="#3a3a3a"/><rect x="156" y="170" width="10" height="100" fill="#3a3a3a"/>
-    <rect x="6" y="6" width="188" height="176" rx="6" fill="#fdfbf6" stroke="#2b2b2b" stroke-width="5"/>
-    <rect x="9" y="9" width="182" height="34" fill="#8b1a1a"/>
+    <rect x="6" y="6" width="188" height="176" rx="6" fill="#fbfaf8" stroke="#2b2b2b" stroke-width="5"/>
+    <rect x="9" y="9" width="182" height="34" fill="#9e1c25"/>
     <text x="100" y="31" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">${svgLabel(p)}</text>
     <rect x="18" y="54" width="70" height="52" fill="#b9a988"/><path d="M18 106 L40 80 L56 94 L70 78 L88 106Z" fill="#7d6b4c"/>
     <g fill="#8a8072"><rect x="96" y="56" width="86" height="5"/><rect x="96" y="67" width="80" height="5"/><rect x="96" y="78" width="86" height="5"/><rect x="96" y="89" width="62" height="5"/><rect x="96" y="100" width="76" height="5"/>
     <rect x="18" y="118" width="100" height="5"/><rect x="18" y="129" width="94" height="5"/><rect x="18" y="140" width="100" height="5"/><rect x="18" y="151" width="70" height="5"/></g>
-    <rect x="130" y="116" width="52" height="52" fill="#fff" stroke="#1b1915" stroke-width="2"/><g transform="translate(130 116)">${QR_G}</g>
+    <rect x="130" y="116" width="52" height="52" fill="#fff" stroke="#16181b" stroke-width="2"/><g transform="translate(130 116)">${QR_G}</g>
   </svg>`,
   qr: (p) => `<svg viewBox="0 0 120 230" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <rect x="55" y="110" width="10" height="120" fill="#3a3a3a"/>
-    <rect x="6" y="6" width="108" height="112" rx="6" fill="#fdfbf6" stroke="#2b2b2b" stroke-width="4"/>
-    <rect x="9" y="9" width="102" height="22" fill="#8b1a1a"/>
+    <rect x="6" y="6" width="108" height="112" rx="6" fill="#fbfaf8" stroke="#2b2b2b" stroke-width="4"/>
+    <rect x="9" y="9" width="102" height="22" fill="#9e1c25"/>
     <text x="60" y="24" text-anchor="middle" font-family="Georgia,serif" font-size="8" font-weight="700" fill="#fff">${svgLabel(p)}</text>
     <g fill="#8a8072"><rect x="16" y="38" width="88" height="4"/><rect x="16" y="46" width="76" height="4"/></g>
-    <rect x="34" y="56" width="52" height="52" fill="#fff" stroke="#1b1915" stroke-width="2"/><g transform="translate(34 56)">${QR_G}</g>
+    <rect x="34" y="56" width="52" height="52" fill="#fff" stroke="#16181b" stroke-width="2"/><g transform="translate(34 56)">${QR_G}</g>
   </svg>`,
   canopy: (p) => `<svg viewBox="0 0 300 250" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M10 46 L150 6 L290 46 Z" fill="#5c3b22" stroke="#2b2b2b" stroke-width="4"/>
     <rect x="30" y="46" width="10" height="204" fill="#5c3b22"/><rect x="260" y="46" width="10" height="204" fill="#5c3b22"/>
-    <rect x="50" y="62" width="200" height="130" rx="4" fill="#fdfbf6" stroke="#2b2b2b" stroke-width="4"/>
-    <rect x="53" y="65" width="194" height="22" fill="#8b1a1a"/>
+    <rect x="50" y="62" width="200" height="130" rx="4" fill="#fbfaf8" stroke="#2b2b2b" stroke-width="4"/>
+    <rect x="53" y="65" width="194" height="22" fill="#9e1c25"/>
     <text x="150" y="80" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="700" fill="#fff">${svgLabel(p)}</text>
     <g fill="none" stroke="#7d6b4c" stroke-width="2"><path d="M64 140 H196"/><rect x="70" y="106" width="16" height="14"/><rect x="96" y="106" width="16" height="14"/><rect x="122" y="106" width="16" height="14"/><rect x="148" y="146" width="16" height="14"/><rect x="174" y="146" width="16" height="14"/></g>
-    <rect x="204" y="132" width="38" height="38" fill="#fff" stroke="#1b1915" stroke-width="2"/><g transform="translate(205 133) scale(.69)">${QR_G}</g>
+    <rect x="204" y="132" width="38" height="38" fill="#fff" stroke="#16181b" stroke-width="2"/><g transform="translate(205 133) scale(.69)">${QR_G}</g>
   </svg>`
 };
 const overlayHTML = (p) => { const kind = FUTURE_BY_TYPE[p.type].overlay; return `<div class="stand stand-${kind}">${OVERLAYS[kind](p)}</div>`; };
@@ -1292,7 +1310,7 @@ const renderHeroes = () => {
   $('#heroesGrid').innerHTML = list.map((h) => {
     const p = byId(h.places[0]);
     return `<button class="block hero reveal" data-hero="${h.id}">
-      <span class="hero-img${h.photo && !h.photo.cap ? ' portrait' : ''}"><img src="${heroImg(h)}" alt="${esc(L(h.name))}" loading="lazy"><span class="chip chip-dark">${esc(L(REGIONS[p.region].name))} ${t('regionShort')}</span></span>
+      <span class="hero-img${h.photo && !h.photo.cap ? ' portrait' : ''}"><img src="${heroImg(h)}" alt="${esc(L(h.name))}" loading="lazy"><span class="chip chip-dark">${esc(L(REGIONS[p.region].name))} ${t('regionShort')}</span>${peekHTML('i-doc', 'peek.hero')}</span>
       <span class="hero-body">
         <span class="t">${esc(L(h.name))}</span>
         <span class="hero-years">${h.years}</span>
@@ -1329,7 +1347,7 @@ const archCard = (a) => {
   const p = byId(a.place);
   const [tName, tIco] = ARCH_TYPES[a.type] || ARCH_TYPES.doc;
   let media = '';
-  if (a.img) media = `<div class="arch-media${a.old ? ' old' : ''}" data-arch-zoom="${a.id}" role="button" tabindex="0" aria-label="${t('fut.zoom')}"><img src="${a.img}" alt="${esc(L(a.title))}" loading="lazy"><span class="chip chip-dark">${ico(tIco)}${t(tName)}</span></div>`;
+  if (a.img) media = `<div class="arch-media${a.old ? ' old' : ''}" data-arch-zoom="${a.id}" role="button" tabindex="0" aria-label="${t('fut.zoom')}"><img src="${a.img}" alt="${esc(L(a.title))}" loading="lazy"><span class="chip chip-dark">${ico(tIco)}${t(tName)}</span>${peekHTML('i-search', 'peek.zoom')}</div>`;
   else if (a.type === 'audio') media = `<div class="arch-audio-top"><span class="chip chip-dark">${ico(tIco)}${t(tName)}</span><div class="wave">${Array.from({ length: 26 }, (_, i) => `<i style="height:${10 + Math.round(Math.abs(Math.sin(i * 1.7)) * 46)}px"></i>`).join('')}</div></div><div class="arch-player">${playerHTML(a)}${transcriptHTML(a)}</div>`;
   else media = `<div class="arch-doc${a.type === 'memory' ? ' arch-memory' : ''}"><span class="chip ${a.pending ? 'chip-gold' : 'chip-red'}">${ico(tIco)}${a.pending ? t('arch.pending') + ' · ' + t(tName) : t(tName)}</span><div>${esc(a.quote || (a.type === 'memory' ? a.text : L(a.title)))}</div></div>`;
   return `<article class="block arch${a.pending ? ' pending' : ''}">
@@ -1557,7 +1575,7 @@ const renderResult = () => {
 
 // Конфетти — только за хороший результат, не мешает нажатиям (pointer-events: none)
 const confetti = () => {
-  const colors = ['#8b1a1a', '#c9a063', '#3f7451', '#2c4a6e', '#fff'];
+  const colors = ['#9e1c25', '#b98d55', '#3f7451', '#2c4a6e', '#fff'];
   for (let i = 0; i < 70; i++) {
     const c = document.createElement('i');
     c.className = 'confetti';
@@ -1622,8 +1640,8 @@ const renderRoute = () => {
         <div class="block route-map">
           <svg viewBox="0 0 1000 871" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${t('route.mapAria')}">
             ${$('#mapSvg').innerHTML}
-            <polyline points="${proj.map((c) => `${c.x * 10},${c.y * 8.71}`).join(' ')}" fill="none" stroke="#8b1a1a" stroke-width="5" stroke-dasharray="14 8" stroke-linejoin="round"/>
-            ${proj.map((c, i) => `<g transform="translate(${c.x * 10} ${c.y * 8.71})"><circle r="20" fill="#8b1a1a" stroke="#fff" stroke-width="4"/><text y="7" text-anchor="middle" font-size="20" font-weight="700" fill="#fff" font-family="Arial">${i + 1}</text></g>`).join('')}
+            <polyline points="${proj.map((c) => `${c.x * 10},${c.y * 8.71}`).join(' ')}" fill="none" stroke="#9e1c25" stroke-width="5" stroke-dasharray="14 8" stroke-linejoin="round"/>
+            ${proj.map((c, i) => `<g transform="translate(${c.x * 10} ${c.y * 8.71})"><circle r="20" fill="#9e1c25" stroke="#fff" stroke-width="4"/><text y="7" text-anchor="middle" font-size="20" font-weight="700" fill="#fff" font-family="Arial">${i + 1}</text></g>`).join('')}
           </svg>
         </div>
         <div class="block block-pad">
